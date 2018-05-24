@@ -19,6 +19,13 @@ class CustomerService {
             ];
     }
 
+    *[Symbol.iterator]() {
+        for(let customer of this.customers) {
+            console.log('iterating ...');
+            yield customer;
+        }
+    }
+
     getCustomers(customerName) {
         let promise = new Promise(
             (resolve, reject) => {
@@ -41,7 +48,7 @@ class CustomerService {
 
                     let filteredCustomers =
                         this.customers
-                            .filter(customer => 
+                            .filter(customer =>
                                 customer.name.indexOf(customerName) >= MATCH_INDEX);
 
                     resolve(filteredCustomers);
