@@ -1,10 +1,25 @@
-let Models = require('./models');
+let Customer = require('./models').Customer;
+let CustomerService = require('./services').CustomerService;
 
-let csvString = '10:Northwind:Bangalore:12000:true:Simple Record:blogs.msdn.com/northwind';
-let internetCustomer = Models.InternetCustomer.create(csvString);
+let serviceObject = new CustomerService();
+let searchString1 = 'wind';
+let searchString2 = 'work';
 
-console.log(internetCustomer instanceof Models.InternetCustomer);
-console.log(internetCustomer instanceof Models.Customer);
+let windPromise = serviceObject.getCustomers(searchString1);
+let workPromise = serviceObject.getCustomers(searchString2);
 
-console.log(internetCustomer.toString());
+Promise
+    .all([windPromise, workPromise])
+    .then(
+        results => {
+            console.log('Results ...');
 
+            for (let result of results) {
+                for (let customer of result) {
+                    console.log(customer.toString());
+                }
+
+                console.log('===============================');
+            }
+        },
+        error => console.log('One of the promises failed!'));
